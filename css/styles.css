@@ -229,7 +229,7 @@ body.menu-open .mobilemenu a { transform: none; opacity: 1; }
 /* layout C: clean black cover; the small mark below the hero grows into the film */
 .intro__mark {
   position: absolute; left: 50%; top: 0;
-  height: 585px; width: auto;
+  height: 615px; width: auto;
   transform-origin: center;
   z-index: 2; pointer-events: none;
   display: none;

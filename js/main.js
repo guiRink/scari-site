@@ -182,68 +182,41 @@ if (!REDUCE) {
     gsap.fromTo(heroLines, { yPercent: 110, y: 0 }, { yPercent: 0, y: 0, duration: 1.1, ease: "power4.out", stagger: 0.1, delay: 0.15 });
   }
 
-  /* layout C: clean black hero; the small mark at the bottom grows into the film */
+  /* layout C: clean black hero; the small mark at the bottom grows into the film.
+     The mark asset is CUT FROM frame 0 itself (assets/intro-mark.png), so when it
+     reaches the film's cover-fit scale the swap is pixel-identical. */
   const introMark = document.getElementById("introMark");
-  let markGeo = null;
   var setMarkRef = null;
-  function measureSymbol() {
-    /* find the symbol's bounding box in frame 0, mapped to viewport coordinates */
-    const img = frames[0];
-    if (!img || !img.complete || !img.naturalWidth) return null;
-    const w = 240, h = Math.round(w * img.naturalHeight / img.naturalWidth);
-    const oc = document.createElement("canvas");
-    oc.width = w; oc.height = h;
-    const octx = oc.getContext("2d", { willReadFrequently: true });
-    octx.drawImage(img, 0, 0, w, h);
-    const d = octx.getImageData(0, 0, w, h).data;
-    let minX = w, maxX = 0, minY = h, maxY = 0;
-    const yLimit = Math.round(h * 0.72); /* ignore the baked wordmark below the symbol */
-    for (let y = 0; y < yLimit; y++) {
-      for (let x = 0; x < w; x++) {
-        const o = (y * w + x) * 4;
-        if (Math.max(d[o], d[o + 1], d[o + 2]) > 70) {
-          if (x < minX) minX = x; if (x > maxX) maxX = x;
-          if (y < minY) minY = y; if (y > maxY) maxY = y;
-        }
-      }
-    }
-    if (maxX <= minX) return null;
-    /* source-image fractions -> viewport px through the cover-fit draw */
-    const cw = canvas.clientWidth, ch = canvas.clientHeight;
-    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
-    const ox = (cw - dw) / 2, oy = (ch - dh) / 2;
-    return {
-      cx: ox + ((minX + maxX) / 2 / w) * dw,
-      cy: oy + ((minY + maxY) / 2 / h) * dh,
-      height: ((maxY - minY) / h) * dh,
-    };
-  }
+  /* source rect of the mark inside the 1920x1080 film (from the extraction script) */
+  const MARK_RECT = { x: 453, y: 162, w: 1020, h: 615, iw: 1920, ih: 1080 };
 
   if (LAYOUT === "c" && introMark) {
     canvas.style.opacity = 0;
-    const MARK_H = 585; /* natural height of the mark asset */
     const smallH = isMobile ? 56 : 72;
     const setMark = (p) => {
-      if (!markGeo) markGeo = measureSymbol();
-      const vh = window.innerHeight;
-      const g = markGeo || { cx: window.innerWidth / 2, cy: vh * 0.45, height: vh * 0.58 };
+      const cw = window.innerWidth, ch = window.innerHeight;
+      /* the same cover-fit math drawFrame uses, in CSS pixels */
+      const scale = Math.max(cw / MARK_RECT.iw, ch / MARK_RECT.ih);
+      const ox = (cw - MARK_RECT.iw * scale) / 2, oy = (ch - MARK_RECT.ih * scale) / 2;
+      const cx = ox + (MARK_RECT.x + MARK_RECT.w / 2) * scale;
+      const cy = oy + (MARK_RECT.y + MARK_RECT.h / 2) * scale;
       const t = gsap.utils.clamp(0, 1, p / 0.16);
       const e = 1 - Math.pow(1 - t, 3);
-      const k0 = smallH / MARK_H, kT = (g.height * 1.06) / MARK_H; /* mark crop is slightly tighter than the bbox */
-      const y0 = vh - 96 - smallH / 2, yT = g.cy;
+      const k0 = smallH / MARK_RECT.h, kT = scale; /* kT = exact film scale */
+      const x0 = cw / 2, y0 = ch - 96 - smallH / 2;
       const k = k0 + (kT - k0) * e;
-      const y = y0 + (yT - y0) * e;
+      const x = x0 + (cx - x0) * e;
+      const y = y0 + (cy - y0) * e;
       introMark.style.transform = `translate(-50%, -50%) scale(${k})`;
+      introMark.style.left = x + "px";
       introMark.style.top = y + "px";
-      introMark.style.opacity = String(1 - gsap.utils.clamp(0, 1, (p - 0.15) / 0.05));
-      canvas.style.opacity = String(gsap.utils.clamp(0, 1, (p - 0.12) / 0.04));
+      /* identical pixels underneath — the handoff can be almost a hard swap */
+      introMark.style.opacity = String(1 - gsap.utils.clamp(0, 1, (p - 0.155) / 0.025));
+      canvas.style.opacity = String(gsap.utils.clamp(0, 1, (p - 0.125) / 0.03));
     };
     setMarkRef = setMark;
     setMark(0);
-    window.addEventListener("resize", () => { markGeo = null; });
-    /* re-measure once frame 0 actually loads */
-    const remeasure = setInterval(() => { markGeo = measureSymbol(); if (markGeo) { clearInterval(remeasure); setMark(introST ? introST.progress : 0); } }, 300);
+    window.addEventListener("resize", () => setMark(introST ? introST.progress : 0));
   }
 
   introST = ScrollTrigger.create({
