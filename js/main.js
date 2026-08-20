@@ -5,6 +5,10 @@ gsap.registerPlugin(ScrollTrigger);
 const LANG = window.SITE_LANG || "pt";
 const BASE = window.ASSET_BASE || "assets/";
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* layout experiment: "b" = hero is the opening cover, the film plays on scroll-out;
+   "a" = the film opens the site and hands off into the hero. Revert = flip this flag. */
+const LAYOUT = window.SITE_LAYOUT || "b";
+document.body.classList.add("layout-" + LAYOUT);
 
 /* ---------- i18n strings used from JS ---------- */
 const STR = {
@@ -166,34 +170,59 @@ if (!REDUCE) {
   sizeCanvas();
   window.addEventListener("resize", sizeCanvas);
 
+  /* short pin: one normal scroll completes the film */
+  const PIN_LEN = LAYOUT === "b" ? (isMobile ? 140 : 180) : (isMobile ? 220 : 260);
+
+  if (LAYOUT === "b") {
+    /* hero cover is visible from the first paint */
+    introHero.style.opacity = 1;
+    introHero.classList.add("is-live");
+    gsap.fromTo(heroLines, { yPercent: 110, y: 0 }, { yPercent: 0, y: 0, duration: 1.1, ease: "power4.out", stagger: 0.1, delay: 0.15 });
+  }
+
   introST = ScrollTrigger.create({
     trigger: ".intro",
     start: "top top",
-    end: "+=" + (isMobile ? 340 : 420) + "%",
+    end: "+=" + PIN_LEN + "%",
     pin: true,
-    scrub: true,
+    scrub: 0.5,
     anticipatePin: 1,
     onUpdate(self) {
       const p = self.progress;
-      currentFrame = progressToFrame(p);
-      drawFrame(currentFrame);
       introHint.style.opacity = p > 0.02 ? 0 : 1;
-      introSkip.style.opacity = p < 0.85 ? 1 : 0;
-      introSkip.style.pointerEvents = p < 0.85 ? "auto" : "none";
 
-      /* hero rises over the dive into black — masked line by line */
-      const t = gsap.utils.clamp(0, 1, (p - HERO_IN_START) / (HERO_IN_END - HERO_IN_START));
-      introHero.style.opacity = easeOutCubic(t);
-      heroLines.forEach((ln, i) => {
-        const lt = gsap.utils.clamp(0, 1, (t - i * 0.13) / 0.74);
-        ln.style.transform = `translateY(${(1 - easeOutCubic(lt)) * 108}%)`;
-      });
-      introHero.classList.toggle("is-live", t > 0.55);
-      nav.classList.toggle("is-scrolled", p > 0.985);
+      if (LAYOUT === "b") {
+        /* cover fades away, then the film runs and hands off into the page */
+        const t = gsap.utils.clamp(0, 1, p / 0.1);
+        const e = easeOutCubic(t);
+        introHero.style.opacity = String(1 - e);
+        introHero.style.transform = `translateY(${-e * 44}px)`;
+        introHero.classList.toggle("is-live", t < 0.4);
+        const fp = gsap.utils.clamp(0, 1, (p - 0.05) / 0.95);
+        currentFrame = progressToFrame(fp);
+        drawFrame(currentFrame);
+        nav.classList.toggle("is-scrolled", p > 0.9);
+      } else {
+        currentFrame = progressToFrame(p);
+        drawFrame(currentFrame);
+        introSkip.style.opacity = p < 0.85 ? 1 : 0;
+        introSkip.style.pointerEvents = p < 0.85 ? "auto" : "none";
+        /* hero rises over the dive into black — masked line by line */
+        const t = gsap.utils.clamp(0, 1, (p - HERO_IN_START) / (HERO_IN_END - HERO_IN_START));
+        introHero.style.opacity = easeOutCubic(t);
+        heroLines.forEach((ln, i) => {
+          const lt = gsap.utils.clamp(0, 1, (t - i * 0.13) / 0.74);
+          ln.style.transform = `translateY(${(1 - easeOutCubic(lt)) * 108}%)`;
+        });
+        introHero.classList.toggle("is-live", t > 0.55);
+        nav.classList.toggle("is-scrolled", p > 0.985);
+      }
     },
   });
 
-  introSkip.addEventListener("click", () => scrollToTarget(introST.end + 2, { duration: 1.1 }));
+  if (LAYOUT !== "b") {
+    introSkip.addEventListener("click", () => scrollToTarget(introST.end + 2, { duration: 1.1 }));
+  }
 
   /* deep links skip the film; a clean load starts at the top of it */
   const hashEl = location.hash.length > 1 && document.querySelector(location.hash);
@@ -229,8 +258,9 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
     document.body.classList.remove("menu-open");
     navBurger && navBurger.setAttribute("aria-expanded", "false");
     if (id === "#top") {
-      /* past the film? the logo goes home to the hero, not back into the film */
-      scrollToTarget(window.scrollY > pinEnd() ? pinEnd() : 0, { duration: 1 });
+      /* layout b: the hero IS the top. layout a: past the film, home = the hero at the pin's end */
+      const home = LAYOUT === "b" ? 0 : (window.scrollY > pinEnd() ? pinEnd() : 0);
+      scrollToTarget(home, { duration: 1 });
     } else {
       scrollToTarget(el, { offset: -70, duration: 1 });
     }
