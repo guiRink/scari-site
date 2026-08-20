@@ -239,8 +239,17 @@ if (!REDUCE) {
         introHero.classList.toggle("is-live", t < 0.4);
         if (LAYOUT === "c") {
           setMarkRef && setMarkRef(p);
-          const fp = gsap.utils.clamp(0, 1, (p - 0.18) / 0.82);
+          const fp = gsap.utils.clamp(0, 1, (p - 0.18) / 0.78); /* film done by p=0.96 */
           currentFrame = progressToFrame(fp);
+          /* the film lands on a statement, not on empty black */
+          const introOutro = document.getElementById("introOutro");
+          if (introOutro) {
+            const ot = gsap.utils.clamp(0, 1, (p - 0.9) / 0.09);
+            const oe = easeOutCubic(ot);
+            introOutro.style.opacity = oe;
+            introOutro.style.transform = `translateY(${(1 - oe) * 36}px)`;
+            introOutro.classList.toggle("is-live", ot > 0.6);
+          }
         } else {
           const fp = gsap.utils.clamp(0, 1, (p - 0.05) / 0.95);
           currentFrame = progressToFrame(fp);
@@ -348,8 +357,20 @@ if (!REDUCE) {
     );
   });
 
-  /* marquee */
+  /* marquee — two lanes, opposite directions */
   gsap.to("#marqueeTrack", { xPercent: -50, ease: "none", duration: 22, repeat: -1 });
+  const track2 = document.getElementById("marqueeTrack2");
+  if (track2) gsap.fromTo(track2, { xPercent: -50 }, { xPercent: 0, ease: "none", duration: 26, repeat: -1 });
+
+  /* yellow highlight sweeps behind key words when they enter */
+  document.querySelectorAll(".hl").forEach((el) => {
+    gsap.to(el, {
+      backgroundSize: "100% 42%",
+      duration: 0.9,
+      ease: "power2.inOut",
+      scrollTrigger: { trigger: el, start: "top 78%" },
+    });
+  });
 
   /* drifting glyph particles */
   const GLYPHS = "01<>{}/#$%&*+=?".split("");
