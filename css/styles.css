@@ -225,10 +225,28 @@ body.menu-open .mobilemenu a { transform: none; opacity: 1; }
   pointer-events: none;
 }
 .layout-b .intro__hero .btn--ghost { background: rgba(5,5,5,0.55); backdrop-filter: blur(4px); }
+
+/* layout C: clean black cover; the small mark below the hero grows into the film */
+.intro__mark {
+  position: absolute; left: 50%; top: 0;
+  height: 585px; width: auto;
+  transform-origin: center;
+  z-index: 2; pointer-events: none;
+  display: none;
+  will-change: transform, opacity, top;
+}
+.layout-c .intro__mark { display: block; }
+.layout-c #introCanvas { opacity: 0; }
+.layout-c .intro__hero { align-items: flex-end; }
+.layout-c .intro__hero::before { display: none; }
+.layout-c .intro__hero-inner { padding: 6.5rem 0 clamp(8rem, 16vh, 11rem); }
+.layout-c .intro__hero .hero__title { margin-bottom: 1.8rem; }
+.layout-c .intro__hero .hero__bottom { margin-bottom: 0; }
+.layout-c .intro__hero .hero__ticker { display: none; }
 .layout-b .intro__hero-inner { padding: 6.5rem 0 clamp(3.4rem, 8vh, 6rem); }
 .layout-b .intro__hero .hero__title { margin-bottom: 1.8rem; }
 .layout-b .intro__hero .hero__bottom { margin-bottom: 2rem; }
-.layout-b .intro__skip { display: none; }
+.layout-b .intro__skip, .layout-c .intro__skip { display: none; }
 
 .line-mask { display: block; overflow: hidden; }
 .line { display: block; will-change: transform; }

@@ -81,24 +81,26 @@ function scrollToTarget(target, opts = {}) {
    Pacing: yellow takeover + dive (35% of the film) gets ~18%
    of the scroll; the hero rises OVER the dive into black.
    ============================================================ */
-const FRAME_COUNT = 151;
+const FRAME_COUNT = 302; /* 30fps × ~10s — dense enough that scrubbing back and forth stays fluid */
 const framePath = (i) => `${BASE}intro/frame_${String(i).padStart(3, "0")}.jpg`;
 
+/* film segments in normalized frame fractions (robust to frame-count changes) */
 const SEGMENTS = [
-  { p0: 0.0, p1: 0.12, f0: 0, f1: 22 },
-  { p0: 0.12, p1: 0.52, f0: 22, f1: 60 },
-  { p0: 0.52, p1: 0.82, f0: 60, f1: 97 },
-  { p0: 0.82, p1: 1.0, f0: 97, f1: 150 },
+  { p0: 0.0, p1: 0.12, f0: 0.0, f1: 0.147 },
+  { p0: 0.12, p1: 0.52, f0: 0.147, f1: 0.4 },
+  { p0: 0.52, p1: 0.82, f0: 0.4, f1: 0.647 },
+  { p0: 0.82, p1: 1.0, f0: 0.647, f1: 1.0 },
 ];
 function progressToFrame(p) {
   p = Math.min(Math.max(p, 0), 1);
+  const last = FRAME_COUNT - 1;
   for (const s of SEGMENTS) {
     if (p <= s.p1) {
       const local = (p - s.p0) / (s.p1 - s.p0);
-      return Math.round(s.f0 + local * (s.f1 - s.f0));
+      return Math.round((s.f0 + local * (s.f1 - s.f0)) * last);
     }
   }
-  return FRAME_COUNT - 1;
+  return last;
 }
 
 const canvas = document.getElementById("introCanvas");
@@ -171,13 +173,77 @@ if (!REDUCE) {
   window.addEventListener("resize", sizeCanvas);
 
   /* short pin: one normal scroll completes the film */
-  const PIN_LEN = LAYOUT === "b" ? (isMobile ? 140 : 180) : (isMobile ? 220 : 260);
+  const PIN_LEN = LAYOUT === "a" ? (isMobile ? 220 : 260) : LAYOUT === "c" ? (isMobile ? 160 : 200) : (isMobile ? 140 : 180);
 
-  if (LAYOUT === "b") {
+  if (LAYOUT === "b" || LAYOUT === "c") {
     /* hero cover is visible from the first paint */
     introHero.style.opacity = 1;
     introHero.classList.add("is-live");
     gsap.fromTo(heroLines, { yPercent: 110, y: 0 }, { yPercent: 0, y: 0, duration: 1.1, ease: "power4.out", stagger: 0.1, delay: 0.15 });
+  }
+
+  /* layout C: clean black hero; the small mark at the bottom grows into the film */
+  const introMark = document.getElementById("introMark");
+  let markGeo = null;
+  var setMarkRef = null;
+  function measureSymbol() {
+    /* find the symbol's bounding box in frame 0, mapped to viewport coordinates */
+    const img = frames[0];
+    if (!img || !img.complete || !img.naturalWidth) return null;
+    const w = 240, h = Math.round(w * img.naturalHeight / img.naturalWidth);
+    const oc = document.createElement("canvas");
+    oc.width = w; oc.height = h;
+    const octx = oc.getContext("2d", { willReadFrequently: true });
+    octx.drawImage(img, 0, 0, w, h);
+    const d = octx.getImageData(0, 0, w, h).data;
+    let minX = w, maxX = 0, minY = h, maxY = 0;
+    const yLimit = Math.round(h * 0.72); /* ignore the baked wordmark below the symbol */
+    for (let y = 0; y < yLimit; y++) {
+      for (let x = 0; x < w; x++) {
+        const o = (y * w + x) * 4;
+        if (Math.max(d[o], d[o + 1], d[o + 2]) > 70) {
+          if (x < minX) minX = x; if (x > maxX) maxX = x;
+          if (y < minY) minY = y; if (y > maxY) maxY = y;
+        }
+      }
+    }
+    if (maxX <= minX) return null;
+    /* source-image fractions -> viewport px through the cover-fit draw */
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+    const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+    const ox = (cw - dw) / 2, oy = (ch - dh) / 2;
+    return {
+      cx: ox + ((minX + maxX) / 2 / w) * dw,
+      cy: oy + ((minY + maxY) / 2 / h) * dh,
+      height: ((maxY - minY) / h) * dh,
+    };
+  }
+
+  if (LAYOUT === "c" && introMark) {
+    canvas.style.opacity = 0;
+    const MARK_H = 585; /* natural height of the mark asset */
+    const smallH = isMobile ? 56 : 72;
+    const setMark = (p) => {
+      if (!markGeo) markGeo = measureSymbol();
+      const vh = window.innerHeight;
+      const g = markGeo || { cx: window.innerWidth / 2, cy: vh * 0.45, height: vh * 0.58 };
+      const t = gsap.utils.clamp(0, 1, p / 0.16);
+      const e = 1 - Math.pow(1 - t, 3);
+      const k0 = smallH / MARK_H, kT = (g.height * 1.06) / MARK_H; /* mark crop is slightly tighter than the bbox */
+      const y0 = vh - 96 - smallH / 2, yT = g.cy;
+      const k = k0 + (kT - k0) * e;
+      const y = y0 + (yT - y0) * e;
+      introMark.style.transform = `translate(-50%, -50%) scale(${k})`;
+      introMark.style.top = y + "px";
+      introMark.style.opacity = String(1 - gsap.utils.clamp(0, 1, (p - 0.15) / 0.05));
+      canvas.style.opacity = String(gsap.utils.clamp(0, 1, (p - 0.12) / 0.04));
+    };
+    setMarkRef = setMark;
+    setMark(0);
+    window.addEventListener("resize", () => { markGeo = null; });
+    /* re-measure once frame 0 actually loads */
+    const remeasure = setInterval(() => { markGeo = measureSymbol(); if (markGeo) { clearInterval(remeasure); setMark(introST ? introST.progress : 0); } }, 300);
   }
 
   introST = ScrollTrigger.create({
@@ -191,15 +257,21 @@ if (!REDUCE) {
       const p = self.progress;
       introHint.style.opacity = p > 0.02 ? 0 : 1;
 
-      if (LAYOUT === "b") {
+      if (LAYOUT === "b" || LAYOUT === "c") {
         /* cover fades away, then the film runs and hands off into the page */
         const t = gsap.utils.clamp(0, 1, p / 0.1);
         const e = easeOutCubic(t);
         introHero.style.opacity = String(1 - e);
         introHero.style.transform = `translateY(${-e * 44}px)`;
         introHero.classList.toggle("is-live", t < 0.4);
-        const fp = gsap.utils.clamp(0, 1, (p - 0.05) / 0.95);
-        currentFrame = progressToFrame(fp);
+        if (LAYOUT === "c") {
+          setMarkRef && setMarkRef(p);
+          const fp = gsap.utils.clamp(0, 1, (p - 0.18) / 0.82);
+          currentFrame = progressToFrame(fp);
+        } else {
+          const fp = gsap.utils.clamp(0, 1, (p - 0.05) / 0.95);
+          currentFrame = progressToFrame(fp);
+        }
         drawFrame(currentFrame);
         nav.classList.toggle("is-scrolled", p > 0.9);
       } else {
