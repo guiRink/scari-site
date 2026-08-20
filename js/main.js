@@ -125,15 +125,35 @@ function nearestLoaded(i) {
   return -1;
 }
 
+let currentFp = 0; /* film progress, drives the portrait zoom */
+
+/* On portrait screens a plain cover-fit crops the film so hard that the symbol
+   overflows the screen. Start with the symbol fitting the width, then zoom
+   into cover-fit while the yellow square grows — the zoom reads as part of
+   the film. On landscape this returns plain cover-fit. */
+function filmGeom(cssW, cssH, iw, ih) {
+  const coverS = Math.max(cssW / iw, cssH / ih);
+  const fitS = cssW / (iw * 0.56); /* the symbol lives in the central ~56% of the frame */
+  let s = coverS;
+  if (fitS < coverS) {
+    const z = gsap.utils.clamp(0, 1, (currentFp - 0.42) / 0.28);
+    const e = z * z * (3 - 2 * z); /* smoothstep */
+    s = fitS + (coverS - fitS) * e;
+  }
+  return s;
+}
+
 function drawFrame(i, force) {
   const idx = nearestLoaded(i);
   if (idx < 0) return;
-  if (!force && idx === drawFrame._last) return;
-  drawFrame._last = idx;
   const img = frames[idx];
   const cw = canvas.width, ch = canvas.height;
-  const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-  const w = img.naturalWidth * scale, h = img.naturalHeight * scale;
+  const dpr = cw / (canvas.clientWidth || 1);
+  const s = filmGeom(canvas.clientWidth, canvas.clientHeight, img.naturalWidth, img.naturalHeight) * dpr;
+  if (!force && idx === drawFrame._last && s === drawFrame._lastS) return;
+  drawFrame._last = idx;
+  drawFrame._lastS = s;
+  const w = img.naturalWidth * s, h = img.naturalHeight * s;
   ctx.fillStyle = "#050505";
   ctx.fillRect(0, 0, cw, ch);
   ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
@@ -195,15 +215,15 @@ if (!REDUCE) {
     const smallH = isMobile ? 56 : 72;
     const setMark = (p) => {
       const cw = window.innerWidth, ch = window.innerHeight;
-      /* the same cover-fit math drawFrame uses, in CSS pixels */
-      const scale = Math.max(cw / MARK_RECT.iw, ch / MARK_RECT.ih);
+      /* the same fit math drawFrame uses at film start (fp=0), in CSS pixels */
+      const scale = Math.min(Math.max(cw / MARK_RECT.iw, ch / MARK_RECT.ih), cw / (MARK_RECT.iw * 0.56));
       const ox = (cw - MARK_RECT.iw * scale) / 2, oy = (ch - MARK_RECT.ih * scale) / 2;
       const cx = ox + (MARK_RECT.x + MARK_RECT.w / 2) * scale;
       const cy = oy + (MARK_RECT.y + MARK_RECT.h / 2) * scale;
       const t = gsap.utils.clamp(0, 1, p / 0.16);
       const e = 1 - Math.pow(1 - t, 3);
       const k0 = smallH / MARK_RECT.h, kT = scale; /* kT = exact film scale */
-      const x0 = cw / 2, y0 = ch - 96 - smallH / 2;
+      const x0 = cw / 2, y0 = ch - (isMobile ? 120 : 96) - smallH / 2;
       const k = k0 + (kT - k0) * e;
       const x = x0 + (cx - x0) * e;
       const y = y0 + (cy - y0) * e;
@@ -240,6 +260,7 @@ if (!REDUCE) {
         if (LAYOUT === "c") {
           setMarkRef && setMarkRef(p);
           const fp = gsap.utils.clamp(0, 1, (p - 0.18) / 0.78); /* film done by p=0.96 */
+          currentFp = fp;
           currentFrame = progressToFrame(fp);
           /* the film lands on a statement, not on empty black */
           const introOutro = document.getElementById("introOutro");
@@ -252,11 +273,13 @@ if (!REDUCE) {
           }
         } else {
           const fp = gsap.utils.clamp(0, 1, (p - 0.05) / 0.95);
+          currentFp = fp;
           currentFrame = progressToFrame(fp);
         }
         drawFrame(currentFrame);
         nav.classList.toggle("is-scrolled", p > 0.9);
       } else {
+        currentFp = p;
         currentFrame = progressToFrame(p);
         drawFrame(currentFrame);
         introSkip.style.opacity = p < 0.85 ? 1 : 0;
@@ -375,7 +398,7 @@ if (!REDUCE) {
   /* drifting glyph particles */
   const GLYPHS = "01<>{}/#$%&*+=?".split("");
   document.querySelectorAll("[data-particles]").forEach((zone) => {
-    const n = +zone.dataset.particles || 20;
+    const n = Math.ceil((+zone.dataset.particles || 20) * (isMobile ? 0.4 : 1));
     for (let i = 0; i < n; i++) {
       const s = document.createElement("span");
       s.className = "particle" + (Math.random() < 0.14 ? " particle--yellow" : "");

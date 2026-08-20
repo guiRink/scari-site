@@ -121,7 +121,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .nav__right { display: flex; align-items: center; gap: 1.2rem; }
 .nav__lang {
   color: var(--gray); text-decoration: none; letter-spacing: 0.18em;
-  border: 1px solid var(--line); padding: 0.6rem 0.85rem;
+  border: 1px solid var(--line); padding: 0.85rem 0.9rem;
   transition: color 0.2s, border-color 0.2s;
 }
 .nav__lang:hover { color: var(--yellow); border-color: var(--yellow); }
@@ -431,7 +431,8 @@ body.menu-open .mobilemenu a { transform: none; opacity: 1; }
 }
 .build__challenge-link {
   color: var(--white); font-weight: 600; text-decoration: none;
-  font-family: var(--font-display); margin-top: 1rem; font-size: 0.95rem;
+  font-family: var(--font-display); margin-top: 0.4rem; font-size: 0.95rem;
+  padding: 0.6rem 0; display: inline-block;
   transition: color 0.2s;
 }
 .build__challenge-link:hover { color: var(--yellow); }
@@ -680,7 +681,7 @@ body.menu-open .mobilemenu a { transform: none; opacity: 1; }
 .chip.is-on { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
 .start__form textarea, .start__form input, .start__form select {
   width: 100%; background: var(--panel); border: 1px solid var(--line);
-  color: var(--white); font-family: var(--font-body); font-size: 0.98rem;
+  color: var(--white); font-family: var(--font-body); font-size: 1rem; /* ≥16px kills iOS auto-zoom */
   padding: 0.9rem 1.1rem; outline: none; resize: vertical;
   transition: border-color 0.25s;
 }
@@ -726,7 +727,7 @@ body.menu-open .mobilemenu a { transform: none; opacity: 1; }
 .footer__name { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.34em; }
 .footer__tag { color: var(--gray2); }
 .footer__links { display: flex; gap: 1.6rem; flex-wrap: wrap; }
-.footer__links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+.footer__links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; padding: 0.6rem 0; display: inline-block; transition: color 0.2s; }
 .footer__links a:hover { color: var(--white); }
 .footer__copy { color: var(--gray2); font-size: 0.8rem; width: 100%; margin-top: 1rem; }
 
@@ -752,11 +753,25 @@ html.js .line { transform: translateY(110%); }
   .mobilemenu { display: none; }
 }
 @media (max-width: 560px) {
-  .build__grid { grid-template-columns: 1fr; }
+  /* rhythm: mobile breathes tighter */
+  :root { --section-pad: clamp(4.5rem, 9vh, 6rem); }
+  .section-head { margin-bottom: 2.4rem; }
+  .grain { display: none; } /* GPU relief on mid phones */
+
+  /* type: every display title gets a mobile size */
+  .hero__title { font-size: clamp(1.5rem, 7.6vw, 2.9rem); }
+  .idea__title, .start__title, .award__title { font-size: clamp(1.8rem, 8.4vw, 2.6rem); }
+
+  /* build: 2 compact columns instead of a 2000px corridor */
+  .build__grid { grid-template-columns: repeat(2, 1fr); }
+  .build__card { min-height: 0; padding: 1.2rem 1rem 1.3rem; }
+  .build__icon { width: 22px; height: 22px; margin: 0.9rem 0 auto; }
+  .build__card h3 { font-size: 1.05rem; margin: 0.9rem 0 0.35rem; }
+  .build__card p { font-size: 0.78rem; line-height: 1.45; }
+  .build__challenge-text { font-size: 1.3rem; }
+
   .start__row { grid-template-columns: 1fr; }
-  .hero__title { font-size: clamp(1.6rem, 8.2vw, 3.1rem); }
   .race__flow { display: none; }
-  /* mobile: tighter hero cover + fewer competing elements */
   .layout-b .intro__hero::before {
     background: linear-gradient(to top, rgba(5,5,5,0.97) 0%, rgba(5,5,5,0.8) 34%, rgba(5,5,5,0.3) 60%, transparent 78%);
   }
@@ -766,22 +781,30 @@ html.js .line { transform: translateY(110%); }
   .hero__ticker { display: none; }
   .hero__meta { display: none; }
   .hero__sub { font-size: 0.95rem; }
+  .hero__sub-more { display: none; }        /* one crisp sentence on small screens */
   .hero__bottom { gap: 1.2rem; margin-bottom: 1.2rem; }
-  .hero__ctas { width: 100%; }
-  .hero__ctas .btn { flex: 1; justify-content: center; }
+  .hero__ctas { width: 100%; flex-direction: column; gap: 0.7rem; }
+  .hero__ctas .btn {
+    width: 100%; justify-content: center;
+    padding: 0.72rem 1rem; min-height: 46px;
+    font-size: 0.9rem; white-space: nowrap;
+  }
+  .layout-c .intro__hero .hero__title { margin-bottom: 1.2rem; }
+  .layout-c .intro__hero-inner { padding: 5rem 0 clamp(10rem, 20vh, 12rem); }
   .layout-b .intro__hero-inner { padding-bottom: 4.4rem; }
-  .intro__skip { top: auto; bottom: 6rem; right: 50%; transform: translateX(50%); }
+  .intro__hint { bottom: 1.2rem; }
+  .intro__hint-line { height: 24px; }
   .race__head { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
   .race__lane { height: 40px; }
+  .race__ticks span:last-child { padding-right: 3.6rem; } /* keep clear of the stamp */
   .pre__stamp-wrap { flex-direction: column; align-items: flex-start; }
-  .pre__ctas { width: 100%; }
-  .pre__ctas .btn { flex: 1; justify-content: center; }
+  .pre__ctas { width: 100%; flex-direction: column; gap: 0.7rem; }
+  .pre__ctas .btn { width: 100%; justify-content: center; }
   .brief__actions { flex-direction: column; }
   .brief__actions .btn { justify-content: center; }
   .footer__big { letter-spacing: 0.12em; text-indent: 0.12em; }
   .award__cta { flex-direction: column; align-items: flex-start; }
   .method__step { gap: 1.1rem; padding: 1.7rem 0; }
-  .section-head { margin-bottom: 3rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   html.js .reveal, .reveal { opacity: 1 !important; transform: none !important; }
