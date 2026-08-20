@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCARI — Digital Solutions Studio</title>
+<meta name="description" content="Você traz a ideia. Nós construímos o produto. A SCARI transforma ideias, problemas e oportunidades em produtos digitais rodando de verdade — em semanas, não semestres.">
+<meta property="og:title" content="SCARI — Digital Solutions Studio">
+<meta property="og:description" content="Construímos o que outros levam meses para entregar. Você traz a ideia. Nós construímos o produto.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Crect x='10' y='10' width='12' height='12' fill='%23FFC400'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a class="nav__logo" href="#top">
+    <img class="nav__logo-mark" src="assets/scari-mark.png" alt="SCARI">
+    <span class="nav__logo-text">SCARI</span>
+  </a>
+  <nav class="nav__links">
+    <a href="#build">O que construímos</a>
+    <a href="#method">Método</a>
+    <a href="#idea">Pré-aprovação</a>
+    <a href="#award">Builder Award</a>
+  </nav>
+  <div class="nav__right">
+    <a href="en/" class="nav__lang mono" title="English version">EN</a>
+    <a href="#start" class="btn btn--yellow nav__cta">Iniciar projeto</a>
+    <button class="nav__burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+
+<nav class="mobilemenu" id="mobileMenu" aria-label="Menu">
+  <a href="#build">O que construímos</a>
+  <a href="#method">Método</a>
+  <a href="#idea">Pré-aprovação</a>
+  <a href="#award">Builder Award</a>
+  <a href="#start">Iniciar projeto</a>
+</nav>
+
+<!-- ============ SCROLL INTRO + HERO OVERLAY ============ -->
+<section class="intro" id="top">
+  <canvas id="introCanvas"></canvas>
+  <div class="intro__hint" id="introHint">
+    <span class="intro__hint-line"></span>
+    <span class="intro__hint-text">Role para entrar</span>
+  </div>
+  <button class="intro__skip mono" id="introSkip">Pular intro ↓</button>
+
+  <!-- hero rises over the final dive into black -->
+  <div class="intro__hero" id="introHero">
+    <div class="hero__particles" data-particles="26"></div>
+    <div class="container intro__hero-inner">
+      <p class="label"><span class="label__sq"></span>Digital Solutions Studio</p>
+      <h1 class="hero__title">
+        <span class="line-mask"><span class="line">Construímos o que</span></span>
+        <span class="line-mask"><span class="line">outros levam <em>meses</em></span></span>
+        <span class="line-mask"><span class="line">para entregar.</span></span>
+      </h1>
+      <div class="hero__bottom">
+        <p class="hero__sub">A SCARI transforma ideias, problemas e oportunidades em produtos rodando de verdade. Engenharia especializada, IA no processo inteiro e ciclos curtos — para a sua ideia sair do papel em semanas, não em semestres.</p>
+        <div class="hero__ctas">
+          <a href="#start" class="btn btn--yellow">Iniciar projeto <span class="btn__arrow">→</span></a>
+          <a href="#idea" class="btn btn--ghost">Pré-aprovar minha ideia</a>
+        </div>
+      </div>
+      <div class="hero__ticker">
+        <span>IA</span><i></i><span>Apps</span><i></i><span>Plataformas</span><i></i><span>Automação</span><i></i><span>Integrações</span><i></i><span>Jogos</span><i></i><span>Software sob medida</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHILOSOPHY MARQUEE ============ -->
+<section class="marquee" aria-hidden="true">
+  <div class="marquee__track" id="marqueeTrack">
+    <span>O software mudou. As empresas de software também deveriam.&nbsp;&nbsp;<b>■</b>&nbsp;&nbsp;</span>
+    <span>O software mudou. As empresas de software também deveriam.&nbsp;&nbsp;<b>■</b>&nbsp;&nbsp;</span>
+    <span>O software mudou. As empresas de software também deveriam.&nbsp;&nbsp;<b>■</b>&nbsp;&nbsp;</span>
+    <span>O software mudou. As empresas de software também deveriam.&nbsp;&nbsp;<b>■</b>&nbsp;&nbsp;</span>
+  </div>
+</section>
+
+<!-- ============ PHILOSOPHY ============ -->
+<section class="philosophy">
+  <div class="container grid-2">
+    <div data-parallax>
+      <p class="label reveal"><span class="label__sq"></span>Por que a SCARI existe</p>
+      <h2 class="h2 reveal">O software mudou. A forma de construir também. <span class="dim">A SCARI já nasceu do outro lado dessa virada.</span></h2>
+    </div>
+    <div class="philosophy__right">
+      <p class="body reveal">IA aqui não é slide de vendas — é processo. Ela trabalha da arquitetura ao deploy, operada por engenheiros que sabem exatamente onde ela acelera e onde ela atrapalha. O resultado é qualidade de estúdio grande, na velocidade que estúdio grande não alcança.</p>
+      <ul class="philosophy__list">
+        <li class="reveal"><span class="mono">01</span>Engenheiros que já entregaram de app a plataforma</li>
+        <li class="reveal"><span class="mono">02</span>IA aplicada em cada etapa do processo</li>
+        <li class="reveal"><span class="mono">03</span>Automação onde humano não precisa estar</li>
+        <li class="reveal"><span class="mono">04</span>Ciclos curtos: construir, medir, evoluir</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT WE BUILD ============ -->
+<section class="build" id="build">
+  <div class="container">
+    <div class="section-head" data-parallax>
+      <p class="label reveal"><span class="label__sq"></span>O que construímos</p>
+      <h2 class="h2 reveal">Se dá para resolver com software,<br><span class="dim">a gente encontra o caminho.</span></h2>
+    </div>
+    <div class="build__grid">
+      <article class="build__card reveal"><span class="mono build__num">01</span><h3>IA</h3><p>Agentes, copilotos e IA integrada aos sistemas que você já usa.</p></article>
+      <article class="build__card reveal"><span class="mono build__num">02</span><h3>Apps</h3><p>Do conceito à loja: apps mobile completos, iOS e Android.</p></article>
+      <article class="build__card reveal"><span class="mono build__num">03</span><h3>Plataformas</h3><p>Web apps, SaaS e sistemas que aguentam o seu crescimento.</p></article>
+      <article class="build__card reveal"><span class="mono build__num">04</span><h3>Automação</h3><p>Processos manuais viram fluxos que rodam sozinhos.</p></article>
+      <article class="build__card reveal"><span class="mono build__num">05</span><h3>Integrações</h3><p>APIs e pontes entre sistemas que hoje não se falam.</p></article>
+      <article class="build__card reveal"><span class="mono build__num">06</span><h3>Jogos</h3><p>Jogos e experiências interativas que prendem atenção.</p></article>
+      <article class="build__card reveal"><span class="mono build__num">07</span><h3>Sob medida</h3><p>MVPs, produtos completos e tudo que ainda não tem nome.</p></article>
+      <article class="build__card build__card--challenge reveal">
+        <h3>Outra coisa?</h3>
+        <p class="build__challenge-text">Nos desafie.</p>
+        <a href="#idea" class="build__challenge-link">Pré-aprovar ideia →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ METHOD ============ -->
+<section class="method" id="method">
+  <div class="container method__wrap">
+    <div class="method__left">
+      <div class="method__sticky">
+        <p class="label reveal"><span class="label__sq"></span>O Método SCARI</p>
+        <h2 class="h2 reveal">Construir. Lançar.<br>Aprender. <span class="yellow">Iterar.</span></h2>
+        <p class="body reveal">Passar meses planejando o produto "perfeito" é o jeito mais caro de errar. A gente constrói, coloca no mundo, mede com usuários reais — e evolui em cima de fatos, não de suposições.</p>
+      </div>
+    </div>
+    <div class="method__right">
+      <div class="method__line" id="methodLine"></div>
+      <ol class="method__steps">
+        <li class="method__step"><span class="mono">01</span><div><h3>Entender</h3><p>Seu negócio, seu problema e o que sucesso significa para você.</p></div></li>
+        <li class="method__step"><span class="mono">02</span><div><h3>Arquitetar</h3><p>O caminho técnico mais curto entre a ideia e o produto.</p></div></li>
+        <li class="method__step"><span class="mono">03</span><div><h3>Construir</h3><p>Sprints curtos, com progresso visível toda semana.</p></div></li>
+        <li class="method__step"><span class="mono">04</span><div><h3>Testar</h3><p>Estabilidade, experiência e performance sob pressão.</p></div></li>
+        <li class="method__step"><span class="mono">05</span><div><h3>Lançar</h3><p>Seu produto no ar, nas mãos de usuários de verdade.</p></div></li>
+        <li class="method__step"><span class="mono">06</span><div><h3>Aprender</h3><p>Métricas e feedback viram o mapa da próxima versão.</p></div></li>
+        <li class="method__step"><span class="mono">07</span><div><h3>Iterar</h3><p>Cada versão melhor que a anterior — em dias, não meses.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SPEED RACE ============ -->
+<section class="versus" id="versus">
+  <div class="container">
+    <div class="section-head" data-parallax>
+      <p class="label reveal"><span class="label__sq"></span>Velocidade é o diferencial</p>
+      <h2 class="h2 reveal">Enquanto uns planejam,<br><span class="dim">a gente já lançou.</span></h2>
+    </div>
+
+    <div class="race reveal" id="race">
+      <div class="race__track">
+        <div class="race__head">
+          <h3 class="race__name dim2">Desenvolvimento tradicional</h3>
+          <p class="race__status mono" id="tradStatus">levantando requisitos…</p>
+        </div>
+        <div class="race__lane">
+          <div class="race__bar" id="tradBar"></div>
+          <div class="race__runner" id="tradRunner"></div>
+          <div class="race__ticks">
+            <span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span>
+          </div>
+        </div>
+        <p class="race__time mono">3 – 6 meses <span class="race__flow">· ideia → planejamento → desenvolvimento → testes → produto</span></p>
+      </div>
+
+      <div class="race__track race__track--scari">
+        <div class="race__head">
+          <h3 class="race__name">SCARI</h3>
+          <p class="race__status mono yellow" id="scariStatus">construindo…</p>
+        </div>
+        <div class="race__lane">
+          <div class="race__bar race__bar--yellow" id="scariBar"></div>
+          <div class="race__runner race__runner--yellow" id="scariRunner"></div>
+          <div class="race__stamp mono" id="scariStamp">✓ NO AR</div>
+          <div class="race__ticks race__ticks--weeks">
+            <span>S1</span><span>S2</span><span>S3</span><span>S4</span>
+          </div>
+        </div>
+        <p class="race__time mono yellow">Dias → Semanas <span class="race__flow">· ideia → construir → lançar → aprender → iterar</span></p>
+      </div>
+    </div>
+
+    <p class="versus__note reveal">Projetos grandes continuam levando o tempo que precisam. A diferença é que na SCARI cada semana termina com progresso que você consegue ver — e usar.</p>
+  </div>
+</section>
+
+<!-- ============ PRE-APPROVAL ============ -->
+<section class="idea" id="idea">
+  <div class="hero__particles" data-particles="18"></div>
+  <div class="container">
+    <p class="label reveal"><span class="label__sq"></span>Pré-aprovação em 1 minuto</p>
+    <h2 class="idea__title reveal">Sua ideia passa<br><em>na SCARI?</em></h2>
+
+    <div class="idea__box reveal">
+      <p class="start__q mono">01 — O que você quer construir?</p>
+      <div class="chips chips--single" id="preChips">
+        <button type="button" class="chip" data-value="IA">IA</button>
+        <button type="button" class="chip" data-value="App">App</button>
+        <button type="button" class="chip" data-value="Plataforma">Plataforma</button>
+        <button type="button" class="chip" data-value="Automação">Automação</button>
+        <button type="button" class="chip" data-value="Jogo">Jogo</button>
+        <button type="button" class="chip" data-value="Outro">Outro</button>
+      </div>
+      <p class="start__q mono">02 — Resuma sua ideia em poucas palavras</p>
+      <div class="idea__inputwrap">
+        <input type="text" id="ideaInput" class="idea__input" placeholder="ex.: App que agenda clientes e cobra pelo WhatsApp" autocomplete="off" aria-label="Resumo da sua ideia">
+        <button class="btn btn--yellow idea__go" id="ideaGo">Rodar pré-análise <span class="btn__arrow">→</span></button>
+      </div>
+      <p class="pre__error mono" id="preError" role="alert" hidden></p>
+
+      <div class="idea__result" id="ideaResult" role="status" aria-live="polite" hidden>
+        <div class="pre__sim">
+          <ul class="pre__lines mono" id="preLines"></ul>
+          <div class="pre__progress"><div class="pre__progress-fill" id="preFill"></div></div>
+        </div>
+        <ul class="idea__components" id="ideaComponents"></ul>
+        <div class="pre__stamp-wrap" id="preStampWrap" hidden>
+          <div class="pre__stamp" id="preStamp">
+            <span class="pre__stamp-badge mono">PRÉ-APROVADA ✓</span>
+            <p class="pre__stamp-text">A SCARI <span class="yellow">consegue construir isso.</span></p>
+            <p class="pre__stamp-sub mono">simulação ilustrativa · na conversa real você recebe prazo e escopo — sem compromisso</p>
+          </div>
+          <div class="pre__ctas">
+            <!-- TODO: substituir pelo número de WhatsApp real -->
+            <a href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Rodei%20a%20pr%C3%A9-an%C3%A1lise%20no%20site%20da%20SCARI%20e%20quero%20conversar%20sobre%20minha%20ideia." target="_blank" rel="noopener" class="btn btn--yellow">Falar no WhatsApp <span class="btn__arrow">→</span></a>
+            <a href="#start" class="btn btn--ghost">Iniciar projeto</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="idea__foot reveal">Pré-análise simulada para dar um norte imediato — a avaliação de verdade acontece na primeira conversa, sem compromisso.</p>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="work" id="work">
+  <div class="container">
+    <div class="section-head" data-parallax>
+      <p class="label reveal"><span class="label__sq"></span>Projetos</p>
+      <h2 class="h2 reveal">Não fazemos apresentações.<br><span class="dim">Entregamos produtos.</span></h2>
+    </div>
+    <div class="work__grid">
+      <article class="work__card reveal">
+        <div class="work__tag mono">Em breve</div>
+        <h3>Os primeiros cases públicos estão em produção agora — no mesmo ritmo que vendemos.</h3>
+        <p>Cada case vai mostrar o problema, a solução, a stack e o prazo real de entrega. Porque prazo, aqui, é argumento.</p>
+      </article>
+      <article class="work__card work__card--stats reveal">
+        <div class="work__stat"><span class="work__stat-num mono" data-count="7">0</span><span class="work__stat-label">disciplinas sob o mesmo teto</span></div>
+        <div class="work__stat"><span class="work__stat-num mono" data-count="10" data-suffix="×">0</span><span class="work__stat-label">ciclos de construção mais rápidos</span></div>
+        <div class="work__stat"><span class="work__stat-num mono" data-count="1">0</span><span class="work__stat-label">time da ideia ao produto entregue</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUILDER AWARD ============ -->
+<section class="award" id="award">
+  <div class="award__deco" aria-hidden="true"></div>
+  <div class="award__inner container">
+    <p class="label label--dark reveal"><span class="label__sq label__sq--dark"></span>SCARI Builder Award</p>
+    <h2 class="award__title reveal">Vença a competição.<br>Nós construímos o produto.</h2>
+    <p class="award__text reveal">Em competições, hackathons e programas de inovação parceiros, o vencedor não leva só o troféu: leva o produto construído pela SCARI. Porque boa ideia não deveria morrer em pitch deck.</p>
+    <div class="award__cta reveal">
+      <p class="award__question">Organizando um evento de startups?</p>
+      <!-- TODO: substituir pelo e-mail real -->
+      <a href="mailto:hello@scari.com?subject=Parceria%20Builder%20Award" class="btn btn--black">Seja parceiro da SCARI <span class="btn__arrow">→</span></a>
+    </div>
+    <div class="award__partners reveal mono">
+      <span>Competições de startups</span><i>■</i><span>Hackathons</span><i>■</i><span>Aceleradoras</span><i>■</i><span>Universidades</span><i>■</i><span>Programas de inovação</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ START A PROJECT ============ -->
+<section class="start" id="start">
+  <div class="container start__wrap">
+    <div class="start__left">
+      <p class="label reveal"><span class="label__sq"></span>Inicie um projeto</p>
+      <h2 class="start__title reveal">Você traz<br>a ideia.<br><span class="yellow">Nós construímos<br>o produto.</span></h2>
+      <div class="start__direct reveal">
+        <p class="dim2">Prefere ir direto ao ponto?</p>
+        <!-- TODO: substituir pelo número de WhatsApp e e-mail reais -->
+        <a class="start__channel" href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Quero%20falar%20sobre%20um%20projeto%20com%20a%20SCARI." target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFC400" stroke-width="1.5" aria-hidden="true"><path d="M2.5 3h11v8.5H6.5L3.5 14v-2.5h-1V3z"/></svg> WhatsApp</a>
+        <a class="start__channel" href="mailto:hello@scari.com"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFC400" stroke-width="1.5" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="1"/><path d="M2 4l6 5 6-5"/></svg> hello@scari.com</a>
+      </div>
+    </div>
+    <form class="start__form reveal" id="projectForm">
+      <p class="start__q mono">01 — O que você quer construir?</p>
+      <div class="chips" id="typeChips">
+        <button type="button" class="chip" data-value="IA">IA</button>
+        <button type="button" class="chip" data-value="App">App</button>
+        <button type="button" class="chip" data-value="Plataforma">Plataforma</button>
+        <button type="button" class="chip" data-value="Automação">Automação</button>
+        <button type="button" class="chip" data-value="Jogo">Jogo</button>
+        <button type="button" class="chip" data-value="Outro">Outro</button>
+      </div>
+      <p class="start__q mono">02 — Descreva sua ideia</p>
+      <textarea id="fDesc" rows="4" placeholder="Conte sobre o problema, a ideia ou a oportunidade…" required></textarea>
+      <div class="start__row">
+        <div><p class="start__q mono">03 — Orçamento</p>
+          <select id="fBudget">
+            <option value="">Selecione uma faixa</option>
+            <option>Até R$ 25 mil</option><option>R$ 25 – 75 mil</option><option>R$ 75 – 250 mil</option><option>R$ 250 mil+</option><option>Ainda não sei</option>
+          </select>
+        </div>
+        <div><p class="start__q mono">04 — Prazo</p>
+          <select id="fTime">
+            <option value="">Quando você precisa?</option>
+            <option>O quanto antes</option><option>Em até um mês</option><option>Neste trimestre</option><option>Flexível</option>
+          </select>
+        </div>
+      </div>
+      <p class="start__q mono">05 — Sobre você</p>
+      <div class="start__row">
+        <input type="text" id="fName" placeholder="Nome" aria-label="Nome" required>
+        <input type="text" id="fCompany" placeholder="Empresa (opcional)" aria-label="Empresa (opcional)">
+      </div>
+      <div class="start__row">
+        <input type="email" id="fEmail" placeholder="E-mail" aria-label="E-mail" required>
+        <input type="tel" id="fPhone" placeholder="Telefone / WhatsApp (opcional)" aria-label="Telefone ou WhatsApp (opcional)">
+      </div>
+      <button type="submit" class="btn btn--yellow start__submit">Enviar meu briefing <span class="btn__arrow">→</span></button>
+      <p class="start__sent mono" id="formSent" role="status" hidden>■ Briefing pronto abaixo. Se o seu e-mail não abriu, copie ou envie pelo WhatsApp.</p>
+      <div class="brief" id="briefBox" hidden>
+        <pre id="briefText"></pre>
+        <div class="brief__actions">
+          <button type="button" class="btn btn--ghost" id="briefCopy">Copiar briefing</button>
+          <a class="btn btn--yellow" id="briefWa" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp <span class="btn__arrow">→</span></a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer__big" aria-hidden="true">SC<b>A</b>RI</p>
+  </div>
+  <div class="container footer__wrap">
+    <div class="footer__brand">
+      <img class="nav__logo-mark" src="assets/scari-mark.png" alt="">
+      <span class="footer__name">SCARI</span>
+    </div>
+    <p class="footer__tag mono">Ideias → Produtos. Rápido.</p>
+    <nav class="footer__links">
+      <a href="#build">O que construímos</a>
+      <a href="#method">Método</a>
+      <a href="#work">Projetos</a>
+      <a href="#award">Builder Award</a>
+      <a href="#start">Iniciar projeto</a>
+    </nav>
+    <p class="footer__copy">© 2026 SCARI — Digital Solutions Studio</p>
+  </div>
+</footer>
+
+<script>window.SITE_LANG = "pt"; window.ASSET_BASE = "assets/";</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
